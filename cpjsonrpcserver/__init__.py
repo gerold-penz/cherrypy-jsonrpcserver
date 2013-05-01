@@ -5,6 +5,9 @@ import sys
 import httplib
 import cherrypy
 import traceback
+import responses
+import tools
+
 try:
     import jsonlib2 as json
     _ParseError = json.ReadError
@@ -26,107 +29,9 @@ cherrypy.tools.raw_body_reader = cherrypy.Tool("before_request_body", _raw_body_
 
 def set_content_type_json():
     """
-    Setzt den Content-Type des Response auf "text/x-json"
+    Setzt den Content-Type des Response auf "application/json"
     """
-    cherrypy.response.headers["Content-Type"] = "text/x-json"
-
-
-class SuccessfulResponse(object):
-    """
-    Represents a successful response.
-    """
-
-    def __init__(self, jsonrpc = None, id = None, result = None):
-        """
-        :param jsonrpc: JSON-RPC version string
-        :param id: JSON-RPC transaction id
-        :param result: Result data
-        """
-        self.jsonrpc = jsonrpc
-        self.id = id
-        self.result = result
-
-
-    def to_dict(self):
-        """
-        Returns the response object as dictionary.
-        """
-        retdict = {}
-        if self.jsonrpc:
-            retdict["jsonrpc"] = self.jsonrpc
-        if not self.id is None:
-            retdict["id"] = self.id
-        if not self.result is None:
-            retdict["result"] = self.result
-        
-        return retdict
-
-
-class ErrorResponse(object): 
-    """
-    Represents an error response object
-    """
-    
-    code = None
-    message = None
-    
-    
-    def __init__(self, jsonrpc = None, id = None, data = None):
-        """
-        :param jsonrpc: JSON-RPC version string
-        :param id: JSON-RPC transaction id
-        :param data: Additional error informations. Can be any, to JSON
-            translatable, data structure.
-        """
-        self.jsonrpc = jsonrpc
-        self.id = id
-        self.data = data
-    
-    
-    def to_dict(self):
-        """
-        Returns the response object as dictionary.
-        """
-        retdict = {"error": {}}
-        if self.jsonrpc:
-            retdict["jsonrpc"] = self.jsonrpc
-        retdict["id"] = self.id
-        retdict["error"]["code"] = self.code
-        retdict["error"]["message"] = self.message
-        if self.data:
-            retdict["error"]["data"] = self.data
-            if isinstance(self.data, basestring):
-                if self.message:
-                    retdict["error"]["message"] = \
-                        self.message + u" " + self.data.capitalize()
-                else:
-                    retdict["error"]["message"] = self.data.capitalize()
-        return retdict
-
-
-class ParseErrorResponse(ErrorResponse):
-    code = -32700
-    message = u"Invalid JSON was received by the server."
-
-
-class InvalidRequestResponse(ErrorResponse):
-    code = -32600
-    message = u"The JSON sent is not a valid Request object."
-
-
-class MethodNotFoundResponse(ErrorResponse):
-    code = -32601
-    message = u"The method does not exist / is not available."
-
-
-class InvalidParamsResponse(ErrorResponse):
-    code = -32602
-    message = u"Invalid method parameter(s)."
-
-
-class InternalErrorResponse(ErrorResponse):
-    code = -32603
-    message = u"Internal JSON-RPC error."
+    cherrypy.response.headers["Content-Type"] = "application/json"
 
 
 class JsonRpcMethods(object):
@@ -189,7 +94,7 @@ class JsonRpcMethods(object):
                     traceback_info = "".join(traceback.format_exception(*sys.exc_info())) 
                     cherrypy.log(traceback_info)
                     return json.dumps(
-                        ParseErrorResponse(
+                        responses.ParseErrorResponse(
                             data = unicode(err)
                         ).to_dict()
                     )
@@ -206,7 +111,7 @@ class JsonRpcMethods(object):
                 traceback_info = "".join(traceback.format_exception(*sys.exc_info())) 
                 cherrypy.log(traceback_info)
                 return json.dumps(
-                    ParseErrorResponse(
+                    responses.ParseErrorResponse(
                         data = unicode(err)
                     ).to_dict()
                 )
@@ -260,7 +165,7 @@ class JsonRpcMethods(object):
                 traceback_info = "".join(traceback.format_exception(*sys.exc_info())) 
                 cherrypy.log("JSON-RPC method '%s' not found" % method)
                 responses.append(
-                    MethodNotFoundResponse(jsonrpc = jsonrpc, id = id).to_dict()
+                    responses.MethodNotFoundResponse(jsonrpc = jsonrpc, id = id).to_dict()
                 )
                 continue
             
@@ -273,7 +178,7 @@ class JsonRpcMethods(object):
                     if id:
                         cherrypy.log("No result from JSON-RPC method '%s'" % method)
                         responses.append(
-                            InternalErrorResponse(
+                            responses.InternalErrorResponse(
                                 jsonrpc = jsonrpc,
                                 id = id,
                                 data = u"No result from JSON-RPC method."
@@ -282,7 +187,7 @@ class JsonRpcMethods(object):
                 else:
                     # Successful response
                     responses.append(
-                        SuccessfulResponse(
+                        responses.SuccessfulResponse(
                             jsonrpc = jsonrpc, id = id, result = result
                         ).to_dict()
                     )
@@ -291,11 +196,11 @@ class JsonRpcMethods(object):
                 cherrypy.log(traceback_info)
                 if "takes exactly" in unicode(err) and "arguments" in unicode(err):
                     responses.append(
-                        InvalidParamsResponse(jsonrpc = jsonrpc, id = id).to_dict()
+                        responses.InvalidParamsResponse(jsonrpc = jsonrpc, id = id).to_dict()
                     )
                 else:
                     responses.append(
-                        InternalErrorResponse(
+                        responses.InternalErrorResponse(
                             jsonrpc = jsonrpc, 
                             id = id,
                             data = unicode(err)
@@ -309,7 +214,7 @@ class JsonRpcMethods(object):
                 else:
                     error_data = None
                 responses.append(
-                    InternalErrorResponse(
+                    responses.InternalErrorResponse(
                         jsonrpc = jsonrpc, 
                         id = id,
                         data = error_data or unicode(err)

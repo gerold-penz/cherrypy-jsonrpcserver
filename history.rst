@@ -17,6 +17,10 @@ Version 0.3.1
 
 - Erster Upload zu PyPi
 
+- Responses in ein eigenes Modul ausgelagert
+
+- *tools.py*-Modul für *jsonrpcmethod*-Tool erstellt
+
 
 =============
 Version 0.2.4

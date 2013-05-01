@@ -23,7 +23,7 @@ setup(
     name = "cherrypy-jsonrpcserver",
     version = VERSION,
     description = (
-        "Python CherryPy JSON-RPC-Server Tool - Einfach verwendbarer JSONRPC-Server"
+        "CherryPy JSON-RPC-Server Tool - Simple To Use Python JSONRPC-Server"
     ),
     long_description = open("README.rst").read(),
     keywords = "CherryPy Web JSON JSON-RPC Tool",
@@ -38,8 +38,8 @@ setup(
     classifiers = [
         #"Development Status :: 1 - Planning",
         # "Development Status :: 2 - Pre-Alpha",
-        # "Development Status :: 3 - Alpha",
-        "Development Status :: 4 - Beta",
+        "Development Status :: 3 - Alpha",
+        # "Development Status :: 4 - Beta",
         # "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: CherryPy",

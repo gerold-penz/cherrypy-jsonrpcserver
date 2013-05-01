@@ -13,12 +13,14 @@ Leitet man eine Klasse von dieser Klasse ab, werden alle mit
 
 gekennzeichneten Methoden dieser Klasse zu JSON-RPC-Methoden.
 
+An der Umsetzung des JSON-RPC-Servers zur Verwendung als CherryPy-Tool wird
+derzeit gearbeitet.
 
 Informationen:
 
 - `JSON-RPC Specification`_
 - `Historical JSON-RPC Specifications`_
-- `JSON-Schema`_
+- `JSON-Schema`_ (klingt interessant - sollte man einbauen)
 
 
 .. _`JSON-RPC Specification`: http://jsonrpc.org/spec.html
@@ -34,10 +36,10 @@ Beispiel:
     # coding: utf-8
 
     import cherrypy
-    import cpjsonrpc
+    import cpjsonrpcserver
 
 
-    class JsonRpcMethods(cpjsonrpc.JsonRpcMethods):
+    class JsonRpcMethods(cpjsonrpcserver.JsonRpcMethods):
         
         def hello(self, name):
             return u"Hello " + name
