@@ -13,6 +13,10 @@ Version 0.3.1
 
 - Übersiedelung nach Github
 
+- Setup erstellt und alles für den Upload zu PyPi vorbereitet
+
+- Erster Upload zu PyPi
+
 
 =============
 Version 0.2.4
