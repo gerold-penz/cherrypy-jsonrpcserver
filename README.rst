@@ -2,6 +2,47 @@
 CherryPy JSON-RPC-Server Tool
 #############################
 
+---------
+
+
+DEPRECATED!
+
+Use *python-jsonrpc* instead:
+
+https://github.com/gerold-penz/python-jsonrpc
+
+::
+
+    pip install python-jsonrpc
+
+
+.. code:: python
+
+    #!/usr/bin/env python
+    # coding: utf-8
+
+    import cherrypy
+    from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
+
+
+    class Root(CherryPyJsonRpc):
+
+        @rpcmethod
+        def add(self, a, b):
+            """Test method"""
+            return a + b
+
+        index = CherryPyJsonRpc.request_handler
+
+
+    print "Starting HTTP server ..."
+    print "URL: http://localhost:8080"
+    cherrypy.quickstart(Root())
+
+
+---------
+
+
 *cherrypy-jsonrpc* stellt CherryPy eine Klasse zum Handling von 
 JSON-RPC v2.0 zur Verfügung.
 
