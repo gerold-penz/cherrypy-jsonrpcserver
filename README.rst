@@ -4,9 +4,7 @@ CherryPy JSON-RPC-Server Tool (DEPRECATED)
 
 **DEPRECATED!**
 
-Use *python-jsonrpc* instead:
-
-See: https://github.com/gerold-penz/python-jsonrpc
+Use *python-jsonrpc* https://github.com/gerold-penz/python-jsonrpc instead:
 
 .. code:: python
 
@@ -34,6 +32,8 @@ See: https://github.com/gerold-penz/python-jsonrpc
 
 ---------
 
+| 
+| 
 
 *cherrypy-jsonrpc* stellt CherryPy eine Klasse zum Handling von 
 JSON-RPC v2.0 zur Verfügung.
