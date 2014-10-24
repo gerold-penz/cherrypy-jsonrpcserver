@@ -1,20 +1,12 @@
-#############################
-CherryPy JSON-RPC-Server Tool
-#############################
+##########################################
+CherryPy JSON-RPC-Server Tool (DEPRECATED)
+##########################################
 
----------
-
-
-DEPRECATED!
+**DEPRECATED!**
 
 Use *python-jsonrpc* instead:
 
-https://github.com/gerold-penz/python-jsonrpc
-
-::
-
-    pip install python-jsonrpc
-
+See: https://github.com/gerold-penz/python-jsonrpc
 
 .. code:: python
 
