@@ -6,6 +6,8 @@ CherryPy JSON-RPC-Server Tool (DEPRECATED)
 
 Use *python-jsonrpc* https://github.com/gerold-penz/python-jsonrpc instead:
 
+**python-jsonrpc** Example:
+
 .. code:: python
 
     #!/usr/bin/env python
